@@ -116,6 +116,23 @@ If you're sending the file under a different field name in JavaScript, this tell
 
 ---
 
+### 3. `X-CSRF-TOKEN`
+
+- **Purpose**: Ensures the request passes Laravel’s CSRF protection (only needed if the route uses the `web` middleware).
+- **Required**: Yes, **if CSRF protection is enabled** (e.g., in `web.php`)
+- **How to obtain** (in a Blade template):
+  ```html
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  ```
+- **Example JavaScript**:
+  ```js
+  headers: {
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+  }
+  ```
+
+---
+
 ## 🛣️ Sample Route
 
 In your `routes/web.php` or `routes/api.php`, define the upload endpoint like so:
@@ -135,6 +152,7 @@ const uploader = new Uploader({
   browse_button: 'browseBtn',
   url: '/upload',
   headers: {
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     'UploadX-Profile': 'avatars',
     'UploadX-File-Field': 'file'
   },
